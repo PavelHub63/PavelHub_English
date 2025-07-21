@@ -1,16 +1,14 @@
--- https://scriptblox.com/script/Universal-Script-PavelHub-44670
-
 -- [[ Pavel Hub v2 - Clean & Stable, Rayfield Style, No Key System ]]
 
 local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 
 local Window = Rayfield:CreateWindow({
-Name = "Pavel Hub",
-LoadingTitle = "Pavel Hub Loader",
-LoadingSubtitle = "Pavel | Hub",
-ConfigurationSaving = {Enabled = false},
-Discord = {Enabled = false},
-KeySystem = false,
+	Name = "Pavel Hub",
+	LoadingTitle = "Pavel Hub Loader",
+	LoadingSubtitle = "Pavel | Hub",
+	ConfigurationSaving = {Enabled = false},
+	Discord = {Enabled = false},
+	KeySystem = false,
 })
 
 -- Services
@@ -30,48 +28,48 @@ local ESPEnabled = false
 local Boxes = {}
 
 MainTab:CreateToggle({
-Name = "ESP",
-CurrentValue = false,
-Callback = function(Value)
-ESPEnabled = Value
-if not Value then
-for _, b in pairs(Boxes) do
-for _, d in pairs(b) do d:Remove() end
-end
-Boxes = {}
-end
-end
+	Name = "ESP",
+	CurrentValue = false,
+	Callback = function(Value)
+		ESPEnabled = Value
+		if not Value then
+			for _, b in pairs(Boxes) do
+				for _, d in pairs(b) do d:Remove() end
+			end
+			Boxes = {}
+		end
+	end
 })
 
 RunService.RenderStepped:Connect(function()
-if not ESPEnabled then return end
-for _, target in ipairs(Players:GetPlayers()) do
-if target ~= Player and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-if not Boxes[target] then
-local box = Drawing.new("Square")
-box.Color = Color3.fromRGB(0, 255, 0)
-box.Thickness = 2
-box.Filled = false
-Boxes[target] = {box}
-end
-local hrp = target.Character.HumanoidRootPart
-local pos, onscreen = Camera:WorldToViewportPoint(hrp.Position)
-local size = Vector2.new(60, 100)
-local box = Boxes[target][1]
-if onscreen then
-box.Visible = true
-box.Size = size
-box.Position = Vector2.new(pos.X - size.X / 2, pos.Y - size.Y / 2)
-else
-box.Visible = false
-end
-else
-if Boxes[target] then
-for _, d in pairs(Boxes[target]) do d:Remove() end
-Boxes[target] = nil
-end
-end
-end
+	if not ESPEnabled then return end
+	for _, target in ipairs(Players:GetPlayers()) do
+		if target ~= Player and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+			if not Boxes[target] then
+				local box = Drawing.new("Square")
+				box.Color = Color3.fromRGB(0, 255, 0)
+				box.Thickness = 2
+				box.Filled = false
+				Boxes[target] = {box}
+			end
+			local hrp = target.Character.HumanoidRootPart
+			local pos, onscreen = Camera:WorldToViewportPoint(hrp.Position)
+			local size = Vector2.new(60, 100)
+			local box = Boxes[target][1]
+			if onscreen then
+				box.Visible = true
+				box.Size = size
+				box.Position = Vector2.new(pos.X - size.X / 2, pos.Y - size.Y / 2)
+			else
+				box.Visible = false
+			end
+		else
+			if Boxes[target] then
+				for _, d in pairs(Boxes[target]) do d:Remove() end
+				Boxes[target] = nil
+			end
+		end
+	end
 end)
 
 -- Speed
@@ -79,22 +77,22 @@ local SpeedOn = false
 local WalkSpeed = 60
 
 MainTab:CreateSlider({
-Name = "Speed Value",
-Range = {16, 200},
-Increment = 5,
-CurrentValue = WalkSpeed,
-Callback = function(Value) WalkSpeed = Value end
+	Name = "Speed Value",
+	Range = {16, 200},
+	Increment = 5,
+	CurrentValue = WalkSpeed,
+	Callback = function(Value) WalkSpeed = Value end
 })
 
 MainTab:CreateToggle({
-Name = "Speed",
-CurrentValue = false,
-Callback = function(Value) SpeedOn = Value end
+	Name = "Speed",
+	CurrentValue = false,
+	Callback = function(Value) SpeedOn = Value end
 })
 
 RunService.Heartbeat:Connect(function()
-local hum = Player.Character and Player.Character:FindFirstChildOfClass("Humanoid")
-if hum then hum.WalkSpeed = SpeedOn and WalkSpeed or 16 end
+	local hum = Player.Character and Player.Character:FindFirstChildOfClass("Humanoid")
+	if hum then hum.WalkSpeed = SpeedOn and WalkSpeed or 16 end
 end)
 
 -- Jump
@@ -102,140 +100,140 @@ local JumpOn = false
 local JumpPower = 100
 
 MainTab:CreateSlider({
-Name = "Jump Power",
-Range = {50, 300},
-Increment = 10,
-CurrentValue = JumpPower,
-Callback = function(Value) JumpPower = Value end
+	Name = "Jump Power",
+	Range = {50, 300},
+	Increment = 10,
+	CurrentValue = JumpPower,
+	Callback = function(Value) JumpPower = Value end
 })
 
 MainTab:CreateToggle({
-Name = "Jump",
-CurrentValue = false,
-Callback = function(Value) JumpOn = Value end
+	Name = "Jump",
+	CurrentValue = false,
+	Callback = function(Value) JumpOn = Value end
 })
 
 RunService.Heartbeat:Connect(function()
-local hum = Player.Character and Player.Character:FindFirstChildOfClass("Humanoid")
-if hum then hum.JumpPower = JumpOn and JumpPower or 50 end
+	local hum = Player.Character and Player.Character:FindFirstChildOfClass("Humanoid")
+	if hum then hum.JumpPower = JumpOn and JumpPower or 50 end
 end)
 
 -- Noclip
 local NoclipOn = false
 
 MainTab:CreateToggle({
-Name = "Noclip",
-CurrentValue = false,
-Callback = function(Value) NoclipOn = Value end
+	Name = "Noclip",
+	CurrentValue = false,
+	Callback = function(Value) NoclipOn = Value end
 })
 
 RunService.Stepped:Connect(function()
-if NoclipOn and Player.Character then
-for _, v in ipairs(Player.Character:GetDescendants()) do
-if v:IsA("BasePart") then v.CanCollide = false end
-end
-end
+	if NoclipOn and Player.Character then
+		for _, v in ipairs(Player.Character:GetDescendants()) do
+			if v:IsA("BasePart") then v.CanCollide = false end
+		end
+	end
 end)
 
 -- Teleport to Player
 UtilityTab:CreateInput({
-Name = "Teleport to Player",
-PlaceholderText = "Player Name",
-RemoveTextAfterFocusLost = true,
-Callback = function(Value)
-local Target = Players:FindFirstChild(Value)
-if Target and Target.Character and Target.Character:FindFirstChild("HumanoidRootPart") then
-local myHRP = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
-if myHRP then
-myHRP.CFrame = Target.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
-end
-else
-Rayfield:Notify({
-Title = "Teleport Failed",
-Content = "Player not found or no HumanoidRootPart.",
-Duration = 4
-})
-end
-end
+	Name = "Teleport to Player",
+	PlaceholderText = "Player Name",
+	RemoveTextAfterFocusLost = true,
+	Callback = function(Value)
+		local Target = Players:FindFirstChild(Value)
+		if Target and Target.Character and Target.Character:FindFirstChild("HumanoidRootPart") then
+			local myHRP = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
+			if myHRP then
+				myHRP.CFrame = Target.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+			end
+		else
+			Rayfield:Notify({
+				Title = "Teleport Failed",
+				Content = "Player not found or no HumanoidRootPart.",
+				Duration = 4
+			})
+		end
+	end
 })
 
 -- Anti-AFK
 UtilityTab:CreateButton({
-Name = "Enable Anti-AFK",
-Callback = function()
-local vu = game:GetService("VirtualUser")
-Player.Idled:Connect(function()
-vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-task.wait(1)
-vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-end)
-Rayfield:Notify({
-Title = "Anti-AFK",
-Content = "Anti-AFK Enabled.",
-Duration = 4
-})
-end
+	Name = "Enable Anti-AFK",
+	Callback = function()
+		local vu = game:GetService("VirtualUser")
+		Player.Idled:Connect(function()
+			vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+			task.wait(1)
+			vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+		end)
+		Rayfield:Notify({
+			Title = "Anti-AFK",
+			Content = "Anti-AFK Enabled.",
+			Duration = 4
+		})
+	end
 })
 
 -- God Mode
 UtilityTab:CreateButton({
-Name = "Activate God Mode",
-Callback = function()
-local hum = Player.Character and Player.Character:FindFirstChildOfClass("Humanoid")
-if hum then
-hum.Name = "GodHumanoid"
-local clone = hum:Clone()
-clone.Parent = Player.Character
-clone.Name = "Humanoid"
-task.wait()
-hum:Destroy()
-Player.Character:FindFirstChild("HumanoidRootPart").Anchored = false
-Rayfield:Notify({
-Title = "God Mode",
-Content = "God Mode Attempted.",
-Duration = 4
-})
-end
-end
+	Name = "Activate God Mode",
+	Callback = function()
+		local hum = Player.Character and Player.Character:FindFirstChildOfClass("Humanoid")
+		if hum then
+			hum.Name = "GodHumanoid"
+			local clone = hum:Clone()
+			clone.Parent = Player.Character
+			clone.Name = "Humanoid"
+			task.wait()
+			hum:Destroy()
+			Player.Character:FindFirstChild("HumanoidRootPart").Anchored = false
+			Rayfield:Notify({
+				Title = "God Mode",
+				Content = "God Mode Attempted.",
+				Duration = 4
+			})
+		end
+	end
 })
 
 -- TP Tool
 UtilityTab:CreateButton({
-Name = "Get TP Tool",
-Callback = function()
-if not Player.Backpack:FindFirstChild("TP Tool") then
-local tool = Instance.new("Tool")
-tool.RequiresHandle = false
-tool.Name = "TP Tool"
-local mouse = Player:GetMouse()
-tool.Activated:Connect(function()
-if mouse then
-local pos = mouse.Hit.Position + Vector3.new(0, 3, 0)
-Player.Character:MoveTo(pos)
-end
-end)
-tool.Parent = Player.Backpack
-Rayfield:Notify({
-Title = "TP Tool",
-Content = "Teleport Tool added to Backpack.",
-Duration = 4
-})
-else
-Rayfield:Notify({
-Title = "TP Tool",
-Content = "You already have the TP Tool.",
-Duration = 4
-})
-end
-end
+	Name = "Get TP Tool",
+	Callback = function()
+		if not Player.Backpack:FindFirstChild("TP Tool") then
+			local tool = Instance.new("Tool")
+			tool.RequiresHandle = false
+			tool.Name = "TP Tool"
+			local mouse = Player:GetMouse()
+			tool.Activated:Connect(function()
+				if mouse then
+					local pos = mouse.Hit.Position + Vector3.new(0, 3, 0)
+					Player.Character:MoveTo(pos)
+				end
+			end)
+			tool.Parent = Player.Backpack
+			Rayfield:Notify({
+				Title = "TP Tool",
+				Content = "Teleport Tool added to Backpack.",
+				Duration = 4
+			})
+		else
+			Rayfield:Notify({
+				Title = "TP Tool",
+				Content = "You already have the TP Tool.",
+				Duration = 4
+			})
+		end
+	end
 })
 
 -- Infinite Yield
 UtilityTab:CreateButton({
-Name = "Load Infinite Yield",
-Callback = function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
-end
+	Name = "Load Infinite Yield",
+	Callback = function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+	end
 })
 
 -- Steal a Brainrot GUI
@@ -276,343 +274,402 @@ Instance.new("UICorner", TPButton).CornerRadius = UDim.new(0, 6)
 local savedPosition
 
 SaveButton.MouseButton1Click:Connect(function()
-if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
-savedPosition = Player.Character.HumanoidRootPart.Position
-Rayfield:Notify({
-Title = "Saved Spot",
-Content = "Location saved successfully!",
-Duration = 4
-})
-end
+	if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
+		savedPosition = Player.Character.HumanoidRootPart.Position
+		Rayfield:Notify({
+			Title = "Saved Spot",
+			Content = "Location saved successfully!",
+			Duration = 4
+		})
+	end
 end)
 
 TPButton.MouseButton1Click:Connect(function()
-if savedPosition and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
-Player.Character.HumanoidRootPart.CFrame = CFrame.new(savedPosition + Vector3.new(0, 2, 0))
-end
+	if savedPosition and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
+		Player.Character.HumanoidRootPart.CFrame = CFrame.new(savedPosition + Vector3.new(0, 2, 0))
+	end
 end)
 
 BrainrotTab:CreateButton({
-Name = "Toggle Spot TP GUI",
-Callback = function()
-ScreenGui.Enabled = not ScreenGui.Enabled
-end
+	Name = "Toggle Spot TP GUI",
+	Callback = function()
+		ScreenGui.Enabled = not ScreenGui.Enabled
+	end
 })
 
 -- Countdown GUI integration
 local countdownGuiLoaded = false
 
 BrainrotTab:CreateButton({
-Name = "Countdown",
-Callback = function()
-if countdownGuiLoaded then
--- Toggle visibility if already loaded
-local existingGui = Player:WaitForChild("PlayerGui"):FindFirstChild("LockCountdownGui")
-if existingGui then
-existingGui.Enabled = not existingGui.Enabled
-end
-return
-end
-countdownGuiLoaded = true
+	Name = "Countdown",
+	Callback = function()
+		if countdownGuiLoaded then
+			-- Toggle visibility if already loaded
+			local existingGui = Player:WaitForChild("PlayerGui"):FindFirstChild("LockCountdownGui")
+			if existingGui then
+				existingGui.Enabled = not existingGui.Enabled
+			end
+			return
+		end
+		countdownGuiLoaded = true
 
-local playerGui = Player:WaitForChild("PlayerGui")  
+		local playerGui = Player:WaitForChild("PlayerGui")
 
-	local screenGui = Instance.new("ScreenGui")  
-	screenGui.Name = "LockCountdownGui"  
-	screenGui.ResetOnSpawn = false  
-	screenGui.Parent = playerGui  
+		local screenGui = Instance.new("ScreenGui")
+		screenGui.Name = "LockCountdownGui"
+		screenGui.ResetOnSpawn = false
+		screenGui.Parent = playerGui
 
-	local toggleButton = Instance.new("TextButton")  
-	toggleButton.Name = "ToggleButton"  
-	toggleButton.Size = UDim2.new(0, 50, 0, 50)  
-	toggleButton.Position = UDim2.new(0, 10, 0, 10)  
-	toggleButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)  
-	toggleButton.TextColor3 = Color3.fromRGB(255, 255, 0)  
-	toggleButton.Font = Enum.Font.GothamBold  
-	toggleButton.Text = "☰"  
-	toggleButton.TextScaled = true  
-	toggleButton.AutoButtonColor = true  
-	toggleButton.Parent = screenGui  
+		local toggleButton = Instance.new("TextButton")
+		toggleButton.Name = "ToggleButton"
+		toggleButton.Size = UDim2.new(0, 50, 0, 50)
+		toggleButton.Position = UDim2.new(0, 10, 0, 10)
+		toggleButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		toggleButton.TextColor3 = Color3.fromRGB(255, 255, 0)
+		toggleButton.Font = Enum.Font.GothamBold
+		toggleButton.Text = "☰"
+		toggleButton.TextScaled = true
+		toggleButton.AutoButtonColor = true
+		toggleButton.Parent = screenGui
 
-	local toggleUICorner = Instance.new("UICorner")  
-	toggleUICorner.CornerRadius = UDim.new(0, 12)  
-	toggleUICorner.Parent = toggleButton  
+		local toggleUICorner = Instance.new("UICorner")
+		toggleUICorner.CornerRadius = UDim.new(0, 12)
+		toggleUICorner.Parent = toggleButton
 
-	local frame = Instance.new("Frame")  
-	frame.Size = UDim2.new(0, 250, 0, 120)  
-	frame.Position = UDim2.new(0.5, -125, 0.4, 0)  
-	frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)  
-	frame.BorderSizePixel = 0  
-	frame.Visible = false  
-	frame.Parent = screenGui  
+		local frame = Instance.new("Frame")
+		frame.Size = UDim2.new(0, 250, 0, 120)
+		frame.Position = UDim2.new(0.5, -125, 0.4, 0)
+		frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		frame.BorderSizePixel = 0
+		frame.Visible = false
+		frame.Parent = screenGui
 
-	local uiCorner = Instance.new("UICorner")  
-	uiCorner.CornerRadius = UDim.new(0, 12)  
-	uiCorner.Parent = frame  
+		local uiCorner = Instance.new("UICorner")
+		uiCorner.CornerRadius = UDim.new(0, 12)
+		uiCorner.Parent = frame
 
-	-- Drag logic  
-	local dragging = false  
-	local dragInput  
-	local dragStart  
-	local startPos  
+		-- Drag logic
+		local dragging = false
+		local dragInput
+		local dragStart
+		local startPos
 
-	local function update(input)  
-		local delta = input.Position - dragStart  
-		local newX = math.clamp(startPos.X.Offset + delta.X, 0, workspace.CurrentCamera.ViewportSize.X - frame.AbsoluteSize.X)  
-		local newY = math.clamp(startPos.Y.Offset + delta.Y, 0, workspace.CurrentCamera.ViewportSize.Y - frame.AbsoluteSize.Y)  
-		frame.Position = UDim2.new(0, newX, 0, newY)  
-	end  
+		local function update(input)
+			local delta = input.Position - dragStart
+			local newX = math.clamp(startPos.X.Offset + delta.X, 0, workspace.CurrentCamera.ViewportSize.X - frame.AbsoluteSize.X)
+			local newY = math.clamp(startPos.Y.Offset + delta.Y, 0, workspace.CurrentCamera.ViewportSize.Y - frame.AbsoluteSize.Y)
+			frame.Position = UDim2.new(0, newX, 0, newY)
+		end
 
-	frame.InputBegan:Connect(function(input)  
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then  
-			dragging = true  
-			dragStart = input.Position  
-			startPos = frame.Position  
+		frame.InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				dragging = true
+				dragStart = input.Position
+				startPos = frame.Position
 
-			input.Changed:Connect(function()  
-				if input.UserInputState == Enum.UserInputState.End then  
-					dragging = false  
-				end  
-			end)  
-		end  
-	end)  
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						dragging = false
+					end
+				end)
+			end
+		end)
 
-	frame.InputChanged:Connect(function(input)  
-		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then  
-			dragInput = input  
-		end  
-	end)  
+		frame.InputChanged:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+				dragInput = input
+			end
+		end)
 
-	UIS.InputChanged:Connect(function(input)  
-		if dragging and input == dragInput then  
-			update(input)  
-		end  
-	end)  
+		UIS.InputChanged:Connect(function(input)
+			if dragging and input == dragInput then
+				update(input)
+			end
+		end)
 
-	-- Input Box  
-	local inputBox = Instance.new("TextBox")  
-	inputBox.Size = UDim2.new(0, 220, 0, 35)  
-	inputBox.Position = UDim2.new(0, 15, 0, 15)  
-	inputBox.PlaceholderText = "Enter countdown seconds (e.g. 60)"  
-	inputBox.ClearTextOnFocus = false  
-	inputBox.Text = ""  
-	inputBox.TextColor3 = Color3.new(1,1,1)  
-	inputBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  
-	inputBox.Parent = frame  
+		-- Input Box
+		local inputBox = Instance.new("TextBox")
+		inputBox.Size = UDim2.new(0, 220, 0, 35)
+		inputBox.Position = UDim2.new(0, 15, 0, 15)
+		inputBox.PlaceholderText = "Enter countdown seconds (e.g. 60)"
+		inputBox.ClearTextOnFocus = false
+		inputBox.Text = ""
+		inputBox.TextColor3 = Color3.new(1,1,1)
+		inputBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+		inputBox.Parent = frame
 
-	local inputUICorner = Instance.new("UICorner")  
-	inputUICorner.CornerRadius = UDim.new(0, 8)  
-	inputUICorner.Parent = inputBox  
+		local inputUICorner = Instance.new("UICorner")
+		inputUICorner.CornerRadius = UDim.new(0, 8)
+		inputUICorner.Parent = inputBox
 
-	-- Countdown label  
-	local countdownLabel = Instance.new("TextLabel")  
-	countdownLabel.Size = UDim2.new(0, 220, 0, 35)  
-	countdownLabel.Position = UDim2.new(0, 15, 0, 60)  
-	countdownLabel.BackgroundColor3 = Color3.fromRGB(40, 40, 40)  
-	countdownLabel.TextColor3 = Color3.fromRGB(255, 215, 0)  
-	countdownLabel.Font = Enum.Font.GothamBold  
-	countdownLabel.TextScaled = true  
-	countdownLabel.Text = "Countdown: 0s"  
-	countdownLabel.Parent = frame  
+		-- Countdown label
+		local countdownLabel = Instance.new("TextLabel")
+		countdownLabel.Size = UDim2.new(0, 220, 0, 35)
+		countdownLabel.Position = UDim2.new(0, 15, 0, 60)
+		countdownLabel.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+		countdownLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
+		countdownLabel.Font = Enum.Font.GothamBold
+		countdownLabel.TextScaled = true
+		countdownLabel.Text = "Countdown: 0s"
+		countdownLabel.Parent = frame
 
-	local labelUICorner = Instance.new("UICorner")  
-	labelUICorner.CornerRadius = UDim.new(0, 8)  
-	labelUICorner.Parent = countdownLabel  
+		local labelUICorner = Instance.new("UICorner")
+		labelUICorner.CornerRadius = UDim.new(0, 8)
+		labelUICorner.Parent = countdownLabel
 
-	-- Redo Button  
-	local redoButton = Instance.new("TextButton")  
-	redoButton.Size = UDim2.new(0, 80, 0, 30)  
-	redoButton.Position = UDim2.new(1, -90, 1, -40)  
-	redoButton.BackgroundColor3 = Color3.fromRGB(200, 40, 40)  
-	redoButton.TextColor3 = Color3.new(1, 1, 1)  
-	redoButton.Font = Enum.Font.GothamBold  
-	redoButton.Text = "Redo"  
-	redoButton.Parent = frame  
+		-- Redo Button
+		local redoButton = Instance.new("TextButton")
+		redoButton.Size = UDim2.new(0, 80, 0, 30)
+		redoButton.Position = UDim2.new(1, -90, 1, -40)
+		redoButton.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
+		redoButton.TextColor3 = Color3.new(1, 1, 1)
+		redoButton.Font = Enum.Font.GothamBold
+		redoButton.Text = "Redo"
+		redoButton.Parent = frame
 
-	local buttonUICorner = Instance.new("UICorner")  
-	buttonUICorner.CornerRadius = UDim.new(0, 8)  
-	buttonUICorner.Parent = redoButton  
+		local buttonUICorner = Instance.new("UICorner")
+		buttonUICorner.CornerRadius = UDim.new(0, 8)
+		buttonUICorner.Parent = redoButton
 
-	-- Countdown logic  
-	local countdownTime = 0  
-	local running = false  
+		-- Countdown logic
+		local countdownTime = 0
+		local running = false
 
-	local function startCountdown(seconds)  
-		countdownTime = seconds  
-		running = true  
-		  
-		spawn(function()  
-			while running and countdownTime > 0 do  
-				countdownLabel.Text = "Countdown: "..countdownTime.."s"  
-				wait(1)  
-				countdownTime = countdownTime - 1  
-			end  
-			if countdownTime <= 0 then  
-				countdownLabel.Text = "Countdown finished!"  
-				running = false  
-			end  
-		end)  
-	end  
+		local function startCountdown(seconds)
+			countdownTime = seconds
+			running = true
+			
+			spawn(function()
+				while running and countdownTime > 0 do
+					countdownLabel.Text = "Countdown: "..countdownTime.."s"
+					wait(1)
+					countdownTime = countdownTime - 1
+				end
+				if countdownTime <= 0 then
+					countdownLabel.Text = "Countdown finished!"
+					running = false
+				end
+			end)
+		end
 
-	inputBox.FocusLost:Connect(function(enterPressed)  
-		if enterPressed then  
-			local num = tonumber(inputBox.Text)  
-			if num and num > 0 then  
-				startCountdown(num)  
-			else  
-				countdownLabel.Text = "Please enter a valid number!"  
-			end  
-		end  
-	end)  
+		inputBox.FocusLost:Connect(function(enterPressed)
+			if enterPressed then
+				local num = tonumber(inputBox.Text)
+				if num and num > 0 then
+					startCountdown(num)
+				else
+					countdownLabel.Text = "Please enter a valid number!"
+				end
+			end
+		end)
 
-	redoButton.MouseButton1Click:Connect(function()  
-		local num = tonumber(inputBox.Text)  
-		if num and num > 0 then  
-			startCountdown(num)  
-		else  
-			countdownLabel.Text = "Please enter a valid number!"  
-		end  
-	end)  
+		redoButton.MouseButton1Click:Connect(function()
+			local num = tonumber(inputBox.Text)
+			if num and num > 0 then
+				startCountdown(num)
+			else
+				countdownLabel.Text = "Please enter a valid number!"
+			end
+		end)
 
-	toggleButton.MouseButton1Click:Connect(function()  
-		frame.Visible = not frame.Visible  
-	end)  
+		toggleButton.MouseButton1Click:Connect(function()
+			frame.Visible = not frame.Visible
+		end)
 
-	screenGui.Enabled = true  
-end
-
+		screenGui.Enabled = true
+	end
 })
 
 BrainrotTab:CreateButton({
-Name = "EspBrainrot",
-Callback = function()
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local Player = Players.LocalPlayer
+    Name = "EspBrainrot",
+    Callback = function()
+        local RunService = game:GetService("RunService")
+        local Players = game:GetService("Players")
+        local Player = Players.LocalPlayer
 
--- Names to highlight  
-    local specialNames = {  
-        ["Cocofanto Elefanto"] = true,  
-        ["Girafa Celestre"] = true,  
-        ["Matteo"] = true,  
-        ["Tralalero Tralala"] = true,  
-        ["Odin Din Din Dun"] = true,  
-        ["Unclito Samito"] = true,  
-        ["Trenostruzzo Turbo 3000"] = true,  
-        ["Gattatino Nyanino"] = true,  
-        ["Los Tralaleritos"] = true,  
-        ["La Vacca Saturno Satunita"] = true,  
-        ["Graipuss Medussi"] = true,  
-        ["La Grande Combinasion"] = true,  
-        ["Garama and Madundung"] = true,  
-        ["Sammyni Spyderini"] = true,  
-    }  
+        -- Names to highlight
+        local specialNames = {
+            ["Cocofanto Elefanto"] = true,
+            ["Girafa Celestre"] = true,
+            ["Matteo"] = true,
+            ["Tralalero Tralala"] = true,
+            ["Odin Din Din Dun"] = true,
+            ["Unclito Samito"] = true,
+            ["Trenostruzzo Turbo 3000"] = true,
+            ["Gattatino Nyanino"] = true,
+            ["Los Tralaleritos"] = true,
+            ["La Vacca Saturno Satunita"] = true,
+            ["Graipuss Medussi"] = true,
+            ["La Grande Combinasion"] = true,
+            ["Garama and Madundung"] = true,
+            ["Sammyni Spyderini"] = true,
+        }
 
-    local SpecialESPEnabled = false  
-    local highlights = {}  
+        local SpecialESPEnabled = false
+        local highlights = {}
 
-    -- Function to create highlight if none exists  
-    local function createHighlight(target)  
-        if highlights[target] then return end  
-        if target:IsA("Model") or target:IsA("Part") then  
-            local highlight = Instance.new("Highlight")  
-            highlight.Name = "ESPHighlight"  
-            highlight.Adornee = target  
-            highlight.FillColor = Color3.fromRGB(0, 255, 0)  
-            highlight.OutlineColor = Color3.fromRGB(255, 255, 255)  
-            highlight.FillTransparency = 0.5  
-            highlight.OutlineTransparency = 0  
-            highlight.Parent = game.CoreGui -- Parent to CoreGui to avoid replication issues  
-            highlights[target] = highlight  
-        end  
-    end  
+        -- Function to create highlight if none exists
+        local function createHighlight(target)
+            if highlights[target] then return end
+            if target:IsA("Model") or target:IsA("Part") then
+                local highlight = Instance.new("Highlight")
+                highlight.Name = "ESPHighlight"
+                highlight.Adornee = target
+                highlight.FillColor = Color3.fromRGB(0, 255, 0)
+                highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+                highlight.FillTransparency = 0.5
+                highlight.OutlineTransparency = 0
+                highlight.Parent = game.CoreGui -- Parent to CoreGui to avoid replication issues
+                highlights[target] = highlight
+            end
+        end
 
-    -- Remove highlight safely  
-    local function removeHighlight(target)  
-        if highlights[target] then  
-            highlights[target]:Destroy()  
-            highlights[target] = nil  
-        end  
-    end  
+        -- Remove highlight safely
+        local function removeHighlight(target)
+            if highlights[target] then
+                highlights[target]:Destroy()
+                highlights[target] = nil
+            end
+        end
 
-    -- Scan workspace for matching named objects and update highlights based on toggle  
-    local function updateHighlights()  
-        if not SpecialESPEnabled then  
-            -- Remove all highlights if disabled  
-            for target, _ in pairs(highlights) do  
-                removeHighlight(target)  
-            end  
-            return  
-        end  
+        -- Scan workspace for matching named objects and update highlights based on toggle
+        local function updateHighlights()
+            if not SpecialESPEnabled then
+                -- Remove all highlights if disabled
+                for target, _ in pairs(highlights) do
+                    removeHighlight(target)
+                end
+                return
+            end
 
-        -- Find all matching objects in workspace  
-        for _, obj in pairs(workspace:GetDescendants()) do  
-            if (obj:IsA("Model") or obj:IsA("Part")) and specialNames[obj.Name] then  
-                createHighlight(obj)  
-            end  
-        end  
+            -- Find all matching objects in workspace
+            for _, obj in pairs(workspace:GetDescendants()) do
+                if (obj:IsA("Model") or obj:IsA("Part")) and specialNames[obj.Name] then
+                    createHighlight(obj)
+                end
+            end
 
-        -- Remove highlights for objects no longer matching or removed  
-        for target, _ in pairs(highlights) do  
-            if not target.Parent or not specialNames[target.Name] then  
-                removeHighlight(target)  
-            end  
-        end  
-    end  
+            -- Remove highlights for objects no longer matching or removed
+            for target, _ in pairs(highlights) do
+                if not target.Parent or not specialNames[target.Name] then
+                    removeHighlight(target)
+                end
+            end
+        end
 
-    -- Initial update  
-    updateHighlights()  
+        -- Initial update
+        updateHighlights()
 
-    -- Update every heartbeat  
-    RunService.Heartbeat:Connect(function()  
-        updateHighlights()  
-    end)  
+        -- Update every heartbeat
+        RunService.Heartbeat:Connect(function()
+            updateHighlights()
+        end)
 
-    -- Create draggable GUI toggle button  
-    local specialGui = Instance.new("ScreenGui")  
-    specialGui.Name = "SpecialESPGui"  
-    specialGui.ResetOnSpawn = false  
-    specialGui.Parent = game.CoreGui  
+        -- Create draggable GUI toggle button
+        local specialGui = Instance.new("ScreenGui")
+        specialGui.Name = "SpecialESPGui"
+        specialGui.ResetOnSpawn = false
+        specialGui.Parent = game.CoreGui
 
-    local frame = Instance.new("Frame", specialGui)  
-    frame.Size = UDim2.new(0, 140, 0, 50)  
-    frame.Position = UDim2.new(0.3, 0, 0.5, 0)  
-    frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)  
-    frame.BorderSizePixel = 0  
-    frame.Active = true  
-    frame.Draggable = true  
-    Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 8)  
+        local frame = Instance.new("Frame", specialGui)
+        frame.Size = UDim2.new(0, 140, 0, 50)
+        frame.Position = UDim2.new(0.3, 0, 0.5, 0)
+        frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+        frame.BorderSizePixel = 0
+        frame.Active = true
+        frame.Draggable = true
+        Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 8)
 
-    local toggleButton = Instance.new("TextButton", frame)  
-    toggleButton.Size = UDim2.new(1, -10, 1, -10)  
-    toggleButton.Position = UDim2.new(0, 5, 0, 5)  
-    toggleButton.BackgroundColor3 = Color3.fromRGB(50, 150, 50)  
-    toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)  
-    toggleButton.Font = Enum.Font.GothamBold  
-    toggleButton.TextSize = 18  
-    toggleButton.Text = "Enable ESP"  
-    Instance.new("UICorner", toggleButton).CornerRadius = UDim.new(0, 6)  
+        local toggleButton = Instance.new("TextButton", frame)
+        toggleButton.Size = UDim2.new(1, -10, 1, -10)
+        toggleButton.Position = UDim2.new(0, 5, 0, 5)
+        toggleButton.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+        toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        toggleButton.Font = Enum.Font.GothamBold
+        toggleButton.TextSize = 18
+        toggleButton.Text = "Enable ESP"
+        Instance.new("UICorner", toggleButton).CornerRadius = UDim.new(0, 6)
 
-    -- Toggle button click  
-    toggleButton.MouseButton1Click:Connect(function()  
-        SpecialESPEnabled = not SpecialESPEnabled  
-        if SpecialESPEnabled then  
-            toggleButton.Text = "Disable ESP"  
-        else  
-            toggleButton.Text = "Enable ESP"  
-            -- Remove highlights immediately when disabled  
-            for target, _ in pairs(highlights) do  
-                removeHighlight(target)  
-            end  
-        end  
-    end)  
-end
-
+        -- Toggle button click
+        toggleButton.MouseButton1Click:Connect(function()
+            SpecialESPEnabled = not SpecialESPEnabled
+            if SpecialESPEnabled then
+                toggleButton.Text = "Disable ESP"
+            else
+                toggleButton.Text = "Enable ESP"
+                -- Remove highlights immediately when disabled
+                for target, _ in pairs(highlights) do
+                    removeHighlight(target)
+                end
+            end
+        end)
+    end
 })
 
 -- Final Notify
 Rayfield:Notify({
-Title = "Pavel Hub Loaded",
-Content = "✅ All tools ready! Enjoy, Pavel.",
-Duration = 5
+	Title = "Pavel Hub Loaded",
+	Content = "✅ All tools ready! Enjoy, Pavel.",
+	Duration = 5
 })
+
+-- Create screen GUI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "PavelHubBadge"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+
+-- Create badge frame
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 350, 0, 80)
+frame.Position = UDim2.new(0.5, -175, 0.05, 0)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.BorderSizePixel = 0
+frame.BackgroundTransparency = 0.1
+frame.Parent = screenGui
+frame.AnchorPoint = Vector2.new(0.5, 0)
+frame.ClipsDescendants = true
+frame.Visible = true
+
+-- UICorner
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = frame
+
+-- Title
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -20, 0, 20)
+title.Position = UDim2.new(0, 10, 0, 5)
+title.BackgroundTransparency = 1
+title.Text = "PavelHub"
+title.Font = Enum.Font.GothamBold
+title.TextSize = 18
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = frame
+
+-- Message
+local message = Instance.new("TextLabel")
+message.Size = UDim2.new(1, -20, 0, 50)
+message.Position = UDim2.new(0, 10, 0, 25)
+message.BackgroundTransparency = 1
+message.TextWrapped = true
+message.Text = "Welcome to PavelHub. It has English version and Kurdish version. بەرخێبێن بۆ پاڤێڵ هەب دوو ڤێرژنی هەیە ئینگلیزی و کوردی"
+message.Font = Enum.Font.Gotham
+message.TextSize = 14
+message.TextColor3 = Color3.fromRGB(220, 220, 220)
+message.TextXAlignment = Enum.TextXAlignment.Left
+message.TextYAlignment = Enum.TextYAlignment.Top
+message.Parent = frame
+
+-- Tween and remove after 6 seconds
+local TweenService = game:GetService("TweenService")
+
+wait(6)
+
+local fadeOut = TweenService:Create(frame, TweenInfo.new(1), {BackgroundTransparency = 1})
+fadeOut:Play()
+
+fadeOut.Completed:Connect(function()
+    screenGui:Destroy()
+end)
