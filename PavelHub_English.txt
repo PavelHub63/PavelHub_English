@@ -606,6 +606,93 @@ BrainrotTab:CreateButton({
     end
 })
 
+BrainrotTab:CreateButton({
+	Name = "Steal Speed",
+	Callback = function()
+		-- // Destroy previous if re-executed
+		if game.CoreGui:FindFirstChild("PavelSpeedBypassGui") then
+			game.CoreGui.PavelSpeedBypassGui:Destroy()
+		end
+
+		-- // Create GUI
+		local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+		ScreenGui.Name = "PavelSpeedBypassGui"
+		ScreenGui.ResetOnSpawn = false
+
+		local Frame = Instance.new("Frame", ScreenGui)
+		Frame.Size = UDim2.new(0, 200, 0, 150)
+		Frame.Position = UDim2.new(0.5, -100, 0.5, -75)
+		Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+		Frame.BorderSizePixel = 0
+		Frame.Active = true
+		Frame.Draggable = true
+
+		local Title = Instance.new("TextLabel", Frame)
+		Title.Size = UDim2.new(1, 0, 0, 30)
+		Title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		Title.Text = "Pavel Speed Bypass"
+		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Title.Font = Enum.Font.Gotham
+		Title.TextSize = 14
+
+		local Button1 = Instance.new("TextButton", Frame)
+		Button1.Size = UDim2.new(1, -20, 0, 40)
+		Button1.Position = UDim2.new(0, 10, 0, 40)
+		Button1.Text = "Speed 31-32"
+		Button1.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+		Button1.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Button1.Font = Enum.Font.Gotham
+		Button1.TextSize = 14
+
+		local Button2 = Instance.new("TextButton", Frame)
+		Button2.Size = UDim2.new(1, -20, 0, 40)
+		Button2.Position = UDim2.new(0, 10, 0, 90)
+		Button2.Text = "Speed 25-27"
+		Button2.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+		Button2.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Button2.Font = Enum.Font.Gotham
+		Button2.TextSize = 14
+
+		-- // Speed Function
+		local function SpeedBypass(targetSpeed)
+			local player = game.Players.LocalPlayer
+			local char = player.Character or player.CharacterAdded:Wait()
+			local hum = char:WaitForChild("Humanoid")
+			local hrp = char:WaitForChild("HumanoidRootPart")
+
+			if hum:FindFirstChild("PavelSpeedBypass") then return end
+
+			local tag = Instance.new("BoolValue", hum)
+			tag.Name = "PavelSpeedBypass"
+
+			local RunService = game:GetService("RunService")
+			local conn
+
+			conn = RunService.RenderStepped:Connect(function()
+				if not hum or hum.Health <= 0 or not char:FindFirstChild("HumanoidRootPart") then
+					conn:Disconnect()
+					return
+				end
+
+				local moveDir = hum.MoveDirection
+				if moveDir.Magnitude > 0 then
+					local velocity = moveDir * targetSpeed
+					hrp.Velocity = Vector3.new(velocity.X, hrp.Velocity.Y, velocity.Z)
+				end
+			end)
+		end
+
+		-- // Button Events
+		Button1.MouseButton1Click:Connect(function()
+			SpeedBypass(31)
+		end)
+
+		Button2.MouseButton1Click:Connect(function()
+			SpeedBypass(26)
+		end)
+	end
+})
+
 -- Final Notify
 Rayfield:Notify({
 	Title = "Pavel Hub Loaded",
