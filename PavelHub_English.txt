@@ -1,1 +1,339 @@
-. 
+-- https://scriptblox.com/script/Universal-Script-PavelHub-Kurdish-45472
+
+-- https://scriptblox.com/script/Universal-Script-PavelHub-Kurdish-45472
+
+-- [[ پاڤێڵ هەب v2 - پاک و تەواو، شێوازی Rayfield، بێ سیستەمی کی ]]
+
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+local Window = Rayfield:CreateWindow({
+	Name = "پاڤێڵ هەب",
+	LoadingTitle = "بارکردنی پاڤێڵ هەب",
+	LoadingSubtitle = "پاڤێڵ | هەب",
+	ConfigurationSaving = {Enabled = false},
+	Discord = {Enabled = false},
+	KeySystem = false,
+})
+
+-- خزمەتگوزاریەکان
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+local RunService = game:GetService("RunService")
+local UIS = game:GetService("UserInputService")
+
+-- تابەکان
+local MainTab = Window:CreateTab("سەرەکی", 4483362458)
+local UtilityTab = Window:CreateTab("ئامرازەکان", 4483362458)
+local BrainrotTab = Window:CreateTab("دزینی بڕینرۆت", 4483362458)
+
+------------------------------------------
+-- ESP
+------------------------------------------
+local ESPEnabled = false
+local Boxes = {}
+
+MainTab:CreateToggle({
+	Name = "ESP (نیشاندانی یاریزان)",
+	CurrentValue = false,
+	Callback = function(Value)
+		ESPEnabled = Value
+		if not Value then
+			for _, b in pairs(Boxes) do
+				for _, d in pairs(b) do d:Remove() end
+			end
+			Boxes = {}
+		end
+	end
+})
+
+RunService.RenderStepped:Connect(function()
+	if not ESPEnabled then return end
+	for _, target in ipairs(Players:GetPlayers()) do
+		if target ~= Player and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+			if not Boxes[target] then
+				local box = Drawing.new("Square")
+				box.Color = Color3.fromRGB(0, 255, 0)
+				box.Thickness = 2
+				box.Filled = false
+				Boxes[target] = {box}
+			end
+			local hrp = target.Character.HumanoidRootPart
+			local pos, onscreen = Camera:WorldToViewportPoint(hrp.Position)
+			local size = Vector2.new(60, 100)
+			local box = Boxes[target][1]
+			if onscreen then
+				box.Visible = true
+				box.Size = size
+				box.Position = Vector2.new(pos.X - size.X / 2, pos.Y - size.Y / 2)
+			else
+				box.Visible = false
+			end
+		else
+			if Boxes[target] then
+				for _, d in pairs(Boxes[target]) do d:Remove() end
+				Boxes[target] = nil
+			end
+		end
+	end
+end)
+
+------------------------------------------
+-- خێرایی
+------------------------------------------
+local SpeedOn = false
+local WalkSpeed = 60
+
+MainTab:CreateSlider({
+	Name = "نرخی خێرایی",
+	Range = {16, 200},
+	Increment = 5,
+	CurrentValue = WalkSpeed,
+	Callback = function(Value) WalkSpeed = Value end
+})
+
+MainTab:CreateToggle({
+	Name = "چالاککردنی خێرایی",
+	CurrentValue = false,
+	Callback = function(Value)
+		SpeedOn = Value
+	end
+})
+
+RunService.Heartbeat:Connect(function()
+	if Player.Character and Player.Character:FindFirstChildOfClass("Humanoid") then
+		local hum = Player.Character:FindFirstChildOfClass("Humanoid")
+		hum.WalkSpeed = SpeedOn and WalkSpeed or 16
+	end
+end)
+
+------------------------------------------
+-- بەرزکردنەوە (جەمپ)
+------------------------------------------
+local JumpOn = false
+local JumpPower = 100
+
+MainTab:CreateSlider({
+	Name = "هێزی جەمپ",
+	Range = {50, 300},
+	Increment = 10,
+	CurrentValue = JumpPower,
+	Callback = function(Value) JumpPower = Value end
+})
+
+MainTab:CreateToggle({
+	Name = "چالاککردنی جەمپ",
+	CurrentValue = false,
+	Callback = function(Value)
+		JumpOn = Value
+	end
+})
+
+RunService.Heartbeat:Connect(function()
+	if Player.Character and Player.Character:FindFirstChildOfClass("Humanoid") then
+		local hum = Player.Character:FindFirstChildOfClass("Humanoid")
+		hum.JumpPower = JumpOn and JumpPower or 50
+	end
+end)
+
+------------------------------------------
+-- نۆکلیپ
+------------------------------------------
+local NoclipOn = false
+
+MainTab:CreateToggle({
+	Name = "چالاککردنی نۆکلیپ",
+	CurrentValue = false,
+	Callback = function(Value)
+		NoclipOn = Value
+	end
+})
+
+RunService.Stepped:Connect(function()
+	if NoclipOn and Player.Character then
+		for _, v in ipairs(Player.Character:GetDescendants()) do
+			if v:IsA("BasePart") then
+				v.CanCollide = false
+			end
+		end
+	end
+end)
+
+------------------------------------------
+-- گەشت بۆ یاریزەر
+------------------------------------------
+UtilityTab:CreateInput({
+	Name = "گواستنەوە بۆ یاریزەر",
+	PlaceholderText = "ناوی یاریزەر بنووسە",
+	RemoveTextAfterFocusLost = true,
+	Callback = function(Value)
+		local Target = Players:FindFirstChild(Value)
+		if Target and Target.Character and Target.Character:FindFirstChild("HumanoidRootPart") then
+			local myHRP = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
+			if myHRP then
+				myHRP.CFrame = Target.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+			end
+		else
+			Rayfield:Notify({
+				Title = "گەڕاندنەوە سەرکەوتوو نەبوو",
+				Content = "یاریزەر نەدۆزرایەوە یان بەتاڵە.",
+				Duration = 4
+			})
+		end
+	end
+})
+
+------------------------------------------
+-- دژ بە AFK
+------------------------------------------
+UtilityTab:CreateButton({
+	Name = "چالاککردنی دژ بە AFK",
+	Callback = function()
+		local vu = game:GetService("VirtualUser")
+		Player.Idled:Connect(function()
+			vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+			task.wait(1)
+			vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+		end)
+		Rayfield:Notify({
+			Title = "دژ بە AFK",
+			Content = "چالاککرا.",
+			Duration = 4
+		})
+	end
+})
+
+------------------------------------------
+-- مودى خودا (God Mode)
+------------------------------------------
+UtilityTab:CreateButton({
+	Name = "چالاککردنی مودى خودا",
+	Callback = function()
+		local hum = Player.Character and Player.Character:FindFirstChildOfClass("Humanoid")
+		if hum then
+			hum.Name = "GodHumanoid"
+			local clone = hum:Clone()
+			clone.Parent = Player.Character
+			clone.Name = "Humanoid"
+			task.wait()
+			hum:Destroy()
+			Player.Character:FindFirstChild("HumanoidRootPart").Anchored = false
+			Rayfield:Notify({
+				Title = "مودی خودا",
+				Content = "هەوڵی چالاککردنی مودى خودا دانرا.",
+				Duration = 4
+			})
+		end
+	end
+})
+
+------------------------------------------
+-- تووڵی گواستنەوە (TP Tool)
+------------------------------------------
+UtilityTab:CreateButton({
+	Name = "وەرگرتنی تووڵی گواستنەوە",
+	Callback = function()
+		if not Player.Backpack:FindFirstChild("تووڵی گواستنەوە") then
+			local tool = Instance.new("Tool")
+			tool.RequiresHandle = false
+			tool.Name = "تووڵی گواستنەوە"
+			local mouse = Player:GetMouse()
+			tool.Activated:Connect(function()
+				if mouse then
+					local pos = mouse.Hit.Position + Vector3.new(0, 3, 0)
+					Player.Character:MoveTo(pos)
+				end
+			end)
+			tool.Parent = Player.Backpack
+			Rayfield:Notify({
+				Title = "تووڵی گواستنەوە",
+				Content = "تووڵەکە زیادکرا بۆ کەرەستەکەت.",
+				Duration = 4
+			})
+		else
+			Rayfield:Notify({
+				Title = "تووڵی گواستنەوە",
+				Content = "پێشتر هەیە لە کەرەستەکەت.",
+				Duration = 4
+			})
+		end
+	end
+})
+
+------------------------------------------
+-- Infinite Yield
+------------------------------------------
+UtilityTab:CreateButton({
+	Name = "بارکردنی Infinite Yield",
+	Callback = function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+	end
+})
+
+-- Final Notify
+Rayfield:Notify({
+	Title = "Pavel Hub Loaded",
+	Content = "✅ All tools ready! Enjoy, Pavel.",
+	Duration = 5
+})
+
+-- Create screen GUI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "PavelHubBadge"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+
+-- Create badge frame
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 350, 0, 80)
+frame.Position = UDim2.new(0.5, -175, 0.05, 0)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.BorderSizePixel = 0
+frame.BackgroundTransparency = 0.1
+frame.Parent = screenGui
+frame.AnchorPoint = Vector2.new(0.5, 0)
+frame.ClipsDescendants = true
+frame.Visible = true
+
+-- UICorner
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = frame
+
+-- Title
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -20, 0, 20)
+title.Position = UDim2.new(0, 10, 0, 5)
+title.BackgroundTransparency = 1
+title.Text = "PavelHub"
+title.Font = Enum.Font.GothamBold
+title.TextSize = 18
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = frame
+
+-- Message
+local message = Instance.new("TextLabel")
+message.Size = UDim2.new(1, -20, 0, 50)
+message.Position = UDim2.new(0, 10, 0, 25)
+message.BackgroundTransparency = 1
+message.TextWrapped = true
+message.Text = "Welcome to PavelHub. It has English version and Kurdish version. بەرخێبێن بۆ پاڤێڵ هەب دوو ڤێرژنی هەیە ئینگلیزی و کوردی"
+message.Font = Enum.Font.Gotham
+message.TextSize = 14
+message.TextColor3 = Color3.fromRGB(220, 220, 220)
+message.TextXAlignment = Enum.TextXAlignment.Left
+message.TextYAlignment = Enum.TextYAlignment.Top
+message.Parent = frame
+
+-- Tween and remove after 6 seconds
+local TweenService = game:GetService("TweenService")
+
+wait(6)
+
+local fadeOut = TweenService:Create(frame, TweenInfo.new(1), {BackgroundTransparency = 1})
+fadeOut:Play()
+
+fadeOut.Completed:Connect(function()
+    screenGui:Destroy()
+end)
